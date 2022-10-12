@@ -1,6 +1,7 @@
 package com.example.webshop_be.domain.shoe;
 
 import com.example.webshop_be.config.generic.ExtendedEntity;
+import com.example.webshop_be.domain.brand.Brand;
 import javax.persistence.*;
 
 @Entity
@@ -19,11 +20,10 @@ public class Shoe extends ExtendedEntity {
     @Column(name = "price")
     private float price;
 
-/*
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "brand_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "brands_id", referencedColumnName = "id")
     private Brand brand;
-*/
+
     public String getName() {
         return name;
     }
@@ -55,7 +55,7 @@ public class Shoe extends ExtendedEntity {
     public void setPrice(float price) {
         this.price = price;
     }
-/*
+
     public Brand getBrand() {
         return brand;
     }
@@ -63,6 +63,4 @@ public class Shoe extends ExtendedEntity {
     public void setBrand(Brand brand) {
         this.brand = brand;
     }
-
- */
 }

@@ -1,8 +1,7 @@
 package com.example.webshop_be.domain.user;
 
 import com.example.webshop_be.config.generic.ExtendedEntity;
-//import com.example.webshop_be.domain.city.City;
-import java.time.LocalDate;
+import com.example.webshop_be.domain.city.City;
 import javax.persistence.*;
 
 @Entity
@@ -27,12 +26,10 @@ public class User extends ExtendedEntity {
     @Column(name = "address")
     private String address;
 
-    /*
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_id", referencedColumnName = "id")
     private City city;
 
-     */
 
     public String getPassword() {
         return password;
@@ -82,7 +79,6 @@ public class User extends ExtendedEntity {
         this.address = address;
     }
 
-    /*
     public City getCity() {
         return city;
     }
@@ -91,5 +87,4 @@ public class User extends ExtendedEntity {
         this.city = city;
     }
 
-     */
 }
