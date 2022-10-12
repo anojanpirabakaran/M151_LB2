@@ -2,6 +2,7 @@ package com.example.webshop_be.domain.user;
 
 import com.example.webshop_be.config.generic.ExtendedEntity;
 import com.example.webshop_be.domain.city.City;
+import com.example.webshop_be.domain.paymentdetail.PaymentDetail;
 import javax.persistence.*;
 
 @Entity
@@ -29,6 +30,10 @@ public class User extends ExtendedEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "city_id", referencedColumnName = "id")
     private City city;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "paymentdetail_id", referencedColumnName = "id")
+    private PaymentDetail paymentDetail;
 
 
     public String getPassword() {
@@ -87,4 +92,11 @@ public class User extends ExtendedEntity {
         this.city = city;
     }
 
+    public PaymentDetail getPaymentDetail() {
+        return paymentDetail;
+    }
+
+    public void setPaymentDetail(PaymentDetail paymentDetail) {
+        this.paymentDetail = paymentDetail;
+    }
 }

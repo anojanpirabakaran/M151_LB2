@@ -1,6 +1,7 @@
 package com.example.webshop_be.domain.brand;
 
 import com.example.webshop_be.domain.brand.mapper.BrandMapper;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,5 +48,11 @@ public class BrandController {
         Brand brand = brandMapper.fromDTO(brandDTO);
         brandService.updateBrand(id, brand);
         return new ResponseEntity<>(brandMapper.toDTO(brand), HttpStatus.OK);
+    }
+
+    @GetMapping({"", "/"})
+    public ResponseEntity<List<BrandDTO>> getAll() {
+        List<Brand> brands = brandService.getAllBrands();
+        return new ResponseEntity<>(brandMapper.toDTOs(brands), HttpStatus.OK);
     }
 }
