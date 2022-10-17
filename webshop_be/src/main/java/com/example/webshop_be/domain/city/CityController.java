@@ -5,10 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/cities")
@@ -36,5 +33,26 @@ public class CityController {
         return new ResponseEntity<>(cityMapper.toDTO(city), HttpStatus.OK);
     }
 
-    //TODO: Create, Update, Delete
+    @PostMapping({"/", ""})
+    public ResponseEntity<CityDTO> create(@RequestBody CityDTO cityDTO)
+            throws Exception {
+        City city =
+                cityService.createCity(cityMapper.fromDTO(cityDTO));
+        return new ResponseEntity<>(cityMapper.toDTO(city), HttpStatus.CREATED);
+    }
+
+    @PutMapping({"/{id}", "/{id}/"})
+    public ResponseEntity<CityDTO> updateById(@PathVariable String id,
+                                              @RequestBody CityDTO cityDTO)
+            throws Exception {
+        City city = cityMapper.fromDTO(cityDTO);
+        cityService.updateCity(id, city);
+        return new ResponseEntity<>(cityMapper.toDTO(city), HttpStatus.OK);
+    }
+
+    @DeleteMapping({"/{id}/", "/{id}"})
+    public ResponseEntity<Void> delete(@PathVariable String id) throws Exception {
+        cityService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

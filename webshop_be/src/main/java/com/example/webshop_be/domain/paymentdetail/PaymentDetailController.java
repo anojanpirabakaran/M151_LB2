@@ -5,10 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/payment-details")
@@ -37,5 +34,27 @@ public class PaymentDetailController {
         return new ResponseEntity<>(mapper.toDTO(paymentDetail), HttpStatus.OK);
     }
 
-    //TODO: Create, Update, Delete
+    @PostMapping({"/", ""})
+    public ResponseEntity<PaymentDetailDTO> create(@RequestBody PaymentDetailDTO paymentDetailDTO)
+            throws Exception {
+        PaymentDetail paymentDetail =
+                paymentDetailService.createPayment(mapper.fromDTO(paymentDetailDTO));
+        return new ResponseEntity<>(mapper.toDTO(paymentDetail), HttpStatus.CREATED);
+    }
+
+    @PutMapping({"/{id}", "/{id}/"})
+    public ResponseEntity<PaymentDetailDTO> updateById(@PathVariable String id,
+                                                       @RequestBody
+                                                       PaymentDetailDTO paymentDetailDTO)
+            throws Exception {
+        PaymentDetail paymentDetail = mapper.fromDTO(paymentDetailDTO);
+        paymentDetailService.updatePayment(id, paymentDetail);
+        return new ResponseEntity<>(mapper.toDTO(paymentDetail), HttpStatus.OK);
+    }
+
+    @DeleteMapping({"/{id}/", "/{id}"})
+    public ResponseEntity<Void> delete(@PathVariable String id) throws Exception {
+        paymentDetailService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
