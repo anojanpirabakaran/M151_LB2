@@ -1,0 +1,6 @@
+Todo Backend:
+
+- Login
+- @PreAuthorised on Endpoints
+- Serverseitige Validierung / Endpoints überarbeiten
+- Testing UnitTest

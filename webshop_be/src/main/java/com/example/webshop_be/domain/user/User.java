@@ -31,7 +31,7 @@ public class User extends ExtendedEntity {
     @JoinColumn(name = "city_id", referencedColumnName = "id")
     private City city;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "paymentdetail_id", referencedColumnName = "id")
     private PaymentDetail paymentDetail;
 
