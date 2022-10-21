@@ -1,6 +1,6 @@
 Todo Backend:
 
 - Login
-- @PreAuthorised on Endpoints
-- Serverseitige Validierung / Endpoints überarbeiten
+- All Update Methods überarbeiten und Serversite Validierung bei Update
 - Testing UnitTest
+- Docker compose file to create docker

@@ -1,5 +1,6 @@
 package com.example.webshop_be.domain.brand;
 
+import com.example.webshop_be.config.error.BadRequestException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Service;
 public class BrandServiceImpl implements BrandService {
 
     private static final String NOTFOUND = "Brand with ID '%s' not found";
+
+    private static final String SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG =
+            "Entity with ID '%s' already exists";
 
     @Autowired
     private final BrandRepository brandRepository;
@@ -22,15 +26,20 @@ public class BrandServiceImpl implements BrandService {
     public Brand findById(String id) {
         if (brandRepository.existsById(id)) {
             Optional<Brand> brand = brandRepository.findById(id);
-            return brand.orElse(null);
+            return brand.get();
         } else {
-            throw new NoSuchElementException(String.format("Brand with ID '%s' not found", id));
+            throw new BadRequestException(String.format("Brand with ID '%s' not found", id));
         }
     }
 
     @Override
     public Brand createBrand(Brand brand) {
-        return brandRepository.save(brand);
+        if (brandRepository.existsById(brand.getId())) {
+            throw new BadRequestException(
+                    String.format(SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG, brand.getId()));
+        } else {
+            return brandRepository.save(brand);
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.webshop_be.domain.authority;
 
+import com.example.webshop_be.config.error.BadRequestException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -9,10 +10,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorityServiceImpl implements AuthorityService {
 
-    private final AuthorityRepository authorityRepository;
-
     private static final String NO_SUCH_ELEMENT_ERROR_MSG =
             "Entity with ID '%s' could not be found";
+
+    private static final String SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG =
+            "Entity with ID '%s' already exists";
+    private final AuthorityRepository authorityRepository;
+
 
     @Autowired
     public AuthorityServiceImpl(AuthorityRepository authorityRepository) {
@@ -35,10 +39,10 @@ public class AuthorityServiceImpl implements AuthorityService {
     public void deleteById(String id) throws NoSuchElementException {
         if (!authorityRepository.existsById(id)) {
             throw new NoSuchElementException(String.format("Authority with ID '%s' not found", id));
+        } else {
+            authorityRepository.deleteRelationsToRolesById(id);
+            authorityRepository.deleteById(id);
         }
-        authorityRepository.deleteRelationsToRolesById(id);
-
-        authorityRepository.deleteById(id);
     }
 
     @Override
@@ -59,7 +63,12 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public Authority createAuthority(Authority authority) {
-        return authorityRepository.save(authority);
+        if (authorityRepository.existsById(authority.getId())) {
+            throw new BadRequestException(
+                    String.format(SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG, authority.getId()));
+        } else {
+            return authorityRepository.save(authority);
+        }
     }
 
     @Override

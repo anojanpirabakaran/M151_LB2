@@ -1,5 +1,6 @@
 package com.example.webshop_be.domain.user;
 
+import com.example.webshop_be.config.error.BadRequestException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(User user) {
         if (userRepository.existsByEmail(user.getEmail()) != null) {
-            throw new NoSuchElementException(
+            throw new BadRequestException(
                     String.format("User with Email '%s' already exists", user.getEmail()));
         } else {
             return userRepository.save(user);
@@ -64,7 +65,6 @@ public class UserServiceImpl implements UserService {
         if (!userRepository.existsById(id)) {
             throw new NoSuchElementException(String.format(NOTFOUND, id));
         }
-
         userRepository.deleteById(id);
         return "User deleted";
     }

@@ -1,6 +1,7 @@
 package com.example.webshop_be.domain.city;
 
 import com.example.webshop_be.config.error.BadRequestException;
+import com.example.webshop_be.domain.brand.Brand;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -14,6 +15,9 @@ public class CityServiceImpl implements CityService {
     private static final String NO_SUCH_ELEMENT_ERROR_MSG =
             "Entity with ID '%s' could not be found";
 
+    private static final String SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG =
+            "Entity with ID '%s' already exists";
+
     @Autowired
     public CityServiceImpl(CityRepository repository) {
         this.repository = repository;
@@ -21,20 +25,28 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public City createCity(City entity) {
-        return repository.save(entity);
+        if (repository.existsById(entity.getId())) {
+            throw new BadRequestException(
+                    String.format(SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG, entity.getId()));
+        } else {
+            return repository.save(entity);
+        }
     }
 
     @Override
-    public String updateCity(String id, City entity) {
-        if (repository.existsById(id)) {
-            checkUpdatedEntityId(id, entity);
-
-            entity.setId(id);
-            repository.save(entity);
-            return "City saved";
-        } else {
-            throw new NoSuchElementException(String.format(NO_SUCH_ELEMENT_ERROR_MSG, id));
-        }
+    public String updateCity(String id, City city) {
+        repository.findById(id)
+                .map(city1 -> {
+                    city1.setName(city.getName());
+                    city1.setPostalCode(city.getPostalCode());
+                    repository.save(city1);
+                    return "City got updated";
+                }).orElseGet(() -> {
+                    city.setId(id);
+                    repository.save(city);
+                    return "Brand got inserted";
+                });
+        return "Brand is updated";
     }
 
     @Override
@@ -59,17 +71,6 @@ public class CityServiceImpl implements CityService {
             return city.get();
         } else {
             throw new NoSuchElementException(String.format(NO_SUCH_ELEMENT_ERROR_MSG, id));
-        }
-    }
-
-    protected void checkUpdatedEntityId(String id, City city) {
-        if (city.getId() != null) {
-            if (id.equals(city.getId())) {
-                return;
-            }
-            throw new BadRequestException(
-                    String.format("Path variable ID '%s' and Request body ID '%s' are not equal",
-                            id, city.getId()));
         }
     }
 }

@@ -36,34 +36,37 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role addAuthorityToRole(String roleId, String authorityId)
-            throws NoSuchElementException {
-        Optional<Role> role = roleRepository.findById(roleId);
-
-        role.get().getAuthorities().add(authorityService.findById(authorityId));
-
-        return roleRepository.save(role.get());
+    public Role addAuthorityToRole(String roleId, String authorityId) {
+        if (roleRepository.existsById(roleId)) {
+            Optional<Role> role = roleRepository.findById(roleId);
+            role.get().getAuthorities().add(authorityService.findById(authorityId));
+            return roleRepository.save(role.get());
+        } else {
+            throw new NoSuchElementException(String.format(NO_SUCH_ELEMENT_ERROR_MSG, roleId));
+        }
     }
 
     @Override
     public Role removeAuthorityFromRole(String roleId, String authorityId)
             throws NoSuchElementException {
-        Optional<Role> role = roleRepository.findById(roleId);
+        if (roleRepository.existsById(roleId)) {
+            Optional<Role> role = roleRepository.findById(roleId);
+            role.get().getAuthorities().remove(authorityService.findById(authorityId));
+            return roleRepository.save(role.get());
+        } else {
+            throw new NoSuchElementException(String.format(NO_SUCH_ELEMENT_ERROR_MSG, roleId));
+        }
 
-        role.get().getAuthorities().remove(authorityService.findById(authorityId));
-
-        return roleRepository.save(role.get());
     }
 
     @Override
     public void deleteById(String id) {
         if (!roleRepository.existsById(id)) {
             throw new NoSuchElementException(String.format("Role with ID '%s' not found", id));
+        } else {
+            roleRepository.deleteRelationsToUsersById(id);
+            roleRepository.deleteById(id);
         }
-
-        roleRepository.deleteRelationsToUsersById(id);
-
-        roleRepository.deleteById(id);
     }
 
     @Override
@@ -84,7 +87,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role createRole(Role role) {
-        return roleRepository.save(role);
+        if (roleRepository.existsById(role.getId())) {
+            return roleRepository.save(role);
+        } else {
+            throw new NoSuchElementException(
+                    String.format(NO_SUCH_ELEMENT_ERROR_MSG, role.getId()));
+        }
     }
 
     @Override
