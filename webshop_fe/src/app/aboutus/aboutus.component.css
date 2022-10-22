@@ -1,7 +1,9 @@
 .about-title {
-    font-family: "Source Code Pro", monospace;
+    font-family: "";
     font-size: 70px;
     text-align: center;
+    margin-top: 5vh;
+    margin-bottom: 6vh;
   }
   
   .timeline {
