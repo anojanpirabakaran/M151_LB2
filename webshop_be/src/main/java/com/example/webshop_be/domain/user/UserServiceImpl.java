@@ -4,7 +4,6 @@ import com.example.webshop_be.config.error.BadRequestException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,7 +11,6 @@ public class UserServiceImpl implements UserService {
 
     private static final String NOTFOUND = "User with ID '%s' not found";
 
-    @Autowired
     private final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {
@@ -21,17 +19,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(String id) {
-        if (userRepository.existsById(id)) {
-            Optional<User> user = userRepository.findById(id);
-            return user.orElse(null);
+        Optional<User> user = userRepository.findById(id);
+
+        if (user.isPresent()) {
+            return user.get();
         } else {
-            throw new NoSuchElementException(String.format("User with ID '%s' not found", id));
+            throw new NoSuchElementException(String.format(NOTFOUND, id));
         }
     }
 
     @Override
     public User createUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail()) != null) {
+        if (userRepository.existsById(user.getId())) {
             throw new BadRequestException(
                     String.format("User with Email '%s' already exists", user.getEmail()));
         } else {
@@ -71,6 +70,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
+        if (userRepository.findAll().isEmpty()) {
+            throw new NoSuchElementException(String.format("No User found in the database"));
+        }
         return userRepository.findAll();
     }
 

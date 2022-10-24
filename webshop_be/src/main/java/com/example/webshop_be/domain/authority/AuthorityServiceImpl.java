@@ -47,6 +47,9 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public List<Authority> getAllAuthorities() {
+        if (authorityRepository.findAll().isEmpty()) {
+            throw new NoSuchElementException(String.format("No User found in the database"));
+        }
         return authorityRepository.findAll();
     }
 

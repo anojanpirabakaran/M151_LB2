@@ -1,6 +1,6 @@
 Todo Backend:
 
 - Login
-- All Update Methods überarbeiten und Serversite Validierung bei Update
+- User Entity ändern
 - Testing UnitTest
-- Docker compose file to create docker
+- Trigger

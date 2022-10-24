@@ -60,6 +60,9 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public List<City> getAllCities() {
+        if (repository.findAll().isEmpty()) {
+            throw new NoSuchElementException(String.format("No User found in the database"));
+        }
         return repository.findAll();
     }
 

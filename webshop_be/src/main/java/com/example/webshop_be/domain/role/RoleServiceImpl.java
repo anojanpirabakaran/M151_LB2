@@ -71,6 +71,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<Role> getAllRoles() {
+        if (roleRepository.findAll().isEmpty()) {
+            throw new NoSuchElementException(String.format("No User found in the database"));
+        }
         return roleRepository.findAll();
     }
 

@@ -49,7 +49,7 @@ public class AuthorityController {
         return new ResponseEntity<>(authorityMapper.toDTO(authority), HttpStatus.OK);
     }
 
-    @DeleteMapping({"/{id}/", "/{id}"})
+    @DeleteMapping({"/{id}", "/{id}/"})
     public ResponseEntity<Void> delete(@PathVariable String id) throws Exception {
         authorityService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

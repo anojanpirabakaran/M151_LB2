@@ -73,6 +73,9 @@ public class PaymentDetailServiceImpl implements PaymentDetailService {
 
     @Override
     public List<PaymentDetail> getAllPayments() {
+        if (repository.findAll().isEmpty()) {
+            throw new NoSuchElementException(String.format("No User found in the database"));
+        }
         return repository.findAll();
     }
 }

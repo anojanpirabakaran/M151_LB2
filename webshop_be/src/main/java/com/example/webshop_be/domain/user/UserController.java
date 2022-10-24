@@ -1,6 +1,7 @@
 package com.example.webshop_be.domain.user;
 
 import com.example.webshop_be.domain.user.mapper.UserMapper;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,15 @@ public class UserController {
     }
 
     @GetMapping({"/{id}", "/{id}/"})
-    public ResponseEntity<UserDTO> findById(@PathVariable String id) {
+    public ResponseEntity<UserDTO> getById(@PathVariable String id) {
         User user = userService.findById(id);
-        return new ResponseEntity<>(userMapper.toDTO(user), HttpStatus.FOUND);
+        return new ResponseEntity<>(userMapper.toDTO(user), HttpStatus.OK);
+    }
+
+    @GetMapping({"", "/"})
+    public @ResponseBody ResponseEntity<List<UserDTO>> getAll() {
+        List<User> users = userService.getAllUsers();
+        return new ResponseEntity<>(userMapper.toDTOs(users), HttpStatus.OK);
     }
 
     @DeleteMapping({"/{id}/", "/{id}"})
@@ -33,7 +40,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping({"/", ""})
+    @PostMapping({"", "/"})
     public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO)
             throws Exception {
         User user = userService.createUser(userMapper.fromDTO(userDTO));
@@ -47,11 +54,5 @@ public class UserController {
         User user = userMapper.fromDTO(userDTO);
         userService.updateUser(id, user);
         return new ResponseEntity<>(userMapper.toDTO(user), HttpStatus.OK);
-    }
-
-    @GetMapping({"/{email}", "/{email}/"})
-    public ResponseEntity<UserDTO> findByEmail(@PathVariable String email) {
-        User user = userService.getByEmail(email);
-        return new ResponseEntity<>(userMapper.toDTO(user), HttpStatus.FOUND);
     }
 }

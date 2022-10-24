@@ -62,13 +62,15 @@ public class BrandServiceImpl implements BrandService {
         if (!brandRepository.existsById(id)) {
             throw new NoSuchElementException(String.format(NOTFOUND, id));
         }
-
         brandRepository.deleteById(id);
         return "Brand deleted";
     }
 
     @Override
     public List<Brand> getAllBrands() {
+        if (brandRepository.findAll().isEmpty()) {
+            throw new NoSuchElementException(String.format("No User found in the database"));
+        }
         return brandRepository.findAll();
     }
 }
