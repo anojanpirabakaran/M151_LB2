@@ -1,27 +1,26 @@
 package com.example.webshop_be.domain.product;
 
-import com.example.webshop_be.config.generic.ExtendedEntity;
+import com.example.webshop_be.config.generic.ExtendedDTO;
 import com.example.webshop_be.domain.brand.Brand;
-import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-@Entity
-@Table(name = "products")
-public class Product extends ExtendedEntity {
+public class ProductDTO extends ExtendedDTO {
 
-    @Column(name = "price")
+    @NotNull
+    @Size(min = 1, max = 3)
     private int price;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "brand_id", referencedColumnName = "id")
+    @NotNull
     private Brand brand;
 
-    @Column(name = "type")
+    @NotNull
     private TypeEnum type;
 
-    @Column(name = "image_link")
+    @NotNull
     private String imageLink;
 
-    @Column(name = "description")
+    @NotNull
     private String description;
 
     public int getPrice() {

@@ -1,5 +1,6 @@
 package com.example.webshop_be.domain.user;
 
+import com.example.webshop_be.domain.role.Role;
 import java.util.List;
 
 public interface UserService {
@@ -15,5 +16,4 @@ public interface UserService {
     List<User> getAllUsers();
 
     User getByEmail(String email);
-
 }

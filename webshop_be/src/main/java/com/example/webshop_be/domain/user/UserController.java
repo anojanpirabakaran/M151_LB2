@@ -1,5 +1,6 @@
 package com.example.webshop_be.domain.user;
 
+import com.example.webshop_be.domain.role.Role;
 import com.example.webshop_be.domain.user.mapper.UserMapper;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping({"", "/"})
-    public @ResponseBody ResponseEntity<List<UserDTO>> getAll() {
+    public ResponseEntity<List<UserDTO>> getAll() {
         List<User> users = userService.getAllUsers();
         return new ResponseEntity<>(userMapper.toDTOs(users), HttpStatus.OK);
     }

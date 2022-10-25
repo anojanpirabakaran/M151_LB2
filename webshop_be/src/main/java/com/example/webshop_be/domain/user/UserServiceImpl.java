@@ -1,6 +1,7 @@
 package com.example.webshop_be.domain.user;
 
 import com.example.webshop_be.config.error.BadRequestException;
+import com.example.webshop_be.domain.role.Role;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
