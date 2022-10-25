@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/products")
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("http://localhost:4200")
 public class ProductController {
 
     private final ProductService productService;

@@ -74,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getAllProducts() {
         if (repository.findAll().isEmpty()) {
-            throw new NoSuchElementException(String.format("No User found in the database"));
+            throw new NoSuchElementException(String.format("No Product found in the database"));
         }
         return repository.findAll();
     }
