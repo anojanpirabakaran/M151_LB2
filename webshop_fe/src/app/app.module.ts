@@ -9,6 +9,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { AboutusComponent } from './aboutus/aboutus.component';
 import { HomeComponent } from './home/home.component';
 import { ProductsComponent } from './products/products.component';
+import { MatSliderModule } from '@angular/material/slider';
+import { LoginComponent } from './login/login.component'
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -17,12 +20,15 @@ import { ProductsComponent } from './products/products.component';
     ProfileComponent,
     AboutusComponent,
     HomeComponent,
-    ProductsComponent
+    ProductsComponent,
+    LoginComponent,   
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatSliderModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
