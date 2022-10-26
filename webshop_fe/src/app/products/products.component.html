@@ -1,2 +1,21 @@
 <app-header></app-header>
-<p>products works!</p>
+
+<h1 class="product_header">Our Products</h1>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 product_card" *ngFor="let product of products">
+      <mat-card>
+        {{ product.id }}
+        <mat-card-title>{{ product.brand.name }}</mat-card-title>
+        <mat-card-subtitle> {{ product.description }} </mat-card-subtitle>
+        <mat-card-subtitle> {{ product.price }} CHF</mat-card-subtitle>
+        <img mat-card-image src="{{ product.imageLink }}" alt="" />
+        <mat-card-actions>
+            <button (click)="navigateRoute(product)" mat-raised-button color="accent" class="details_button">View details</button>
+        </mat-card-actions>
+        
+      </mat-card>
+    </div>
+  </div>
+</div>

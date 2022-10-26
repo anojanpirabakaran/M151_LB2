@@ -12,6 +12,9 @@ import { ProductsComponent } from './products/products.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { LoginComponent } from './login/login.component'
 import { HttpClientModule } from '@angular/common/http';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 
 @NgModule({
   declarations: [
@@ -21,14 +24,17 @@ import { HttpClientModule } from '@angular/common/http';
     AboutusComponent,
     HomeComponent,
     ProductsComponent,
-    LoginComponent,   
+    LoginComponent,
+    ProductDetailComponent,   
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatSliderModule,
-    HttpClientModule
+    HttpClientModule,
+    MatCardModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

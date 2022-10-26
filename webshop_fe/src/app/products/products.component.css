@@ -1,0 +1,11 @@
+.product_card{
+    margin-bottom: 4vh;
+}
+
+.product_header {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 7vh;
+    text-align: center;
+    margin-top: 5vh;
+    margin-bottom: 6vh;
+}

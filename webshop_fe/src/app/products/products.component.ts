@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Products } from 'src/model/Products';
 import { HttpService } from 'src/service/HttpService.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
@@ -9,15 +10,18 @@ import { HttpService } from 'src/service/HttpService.service';
 })
 export class ProductsComponent implements OnInit {
 
-  products: Products[] = [];
+  products: Products[] | undefined;
 
-  constructor(private httpService: HttpService) {}
+  constructor(private httpService: HttpService, private route: Router) {}
 
   ngOnInit(): void {
    this.httpService.getProducts().subscribe((data) => {
     this.products = data;
-    console.log(data)
    })
+  }
+
+  navigateRoute(productLink: Products){
+    this.route.navigate(['/product-detail', productLink.id])
   }
 
 }
