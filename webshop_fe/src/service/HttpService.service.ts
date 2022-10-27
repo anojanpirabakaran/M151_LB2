@@ -14,4 +14,9 @@ export class HttpService {
 getProducts(){
     return this.http.get<Products[]>(this.url);
 }
+
+getProductById(id: string){
+    const url = `${this.url}/${id}`;
+    return this.http.get<Products>(url)
+}
 }

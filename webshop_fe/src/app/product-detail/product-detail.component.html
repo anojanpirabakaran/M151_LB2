@@ -1,4 +1,16 @@
-
-<div *ngIf="product">
-    <p>{{product.description | json}}</p>
+<app-header></app-header>
+<div class="container" *ngIf="product">
+  <mat-card>
+    <div class="row">
+      <div class="col-md-6">
+         <img mat-card-image src="{{ product.imageLink }}" alt="" />
+      </div>
+      <div class="col-md-6">
+        <mat-card-title>{{ product.brand.name }}</mat-card-title>
+        <mat-card-subtitle> {{ product.description }} </mat-card-subtitle>
+        <mat-card-subtitle> {{ product.price }} CHF</mat-card-subtitle>
+        <button mat-raised-button color="accent" routerLink="/products">Go back</button> 
+      </div>
+    </div>
+  </mat-card>
 </div>
