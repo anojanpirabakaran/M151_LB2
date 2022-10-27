@@ -1,6 +1,4 @@
 Todo Backend:
 
 - Login
-- User Entity ändern
-- Testing UnitTest
 - Trigger

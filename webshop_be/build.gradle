@@ -21,6 +21,7 @@ repositories {
 dependencies {
 	compileOnly(group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final')
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
 	//implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
@@ -28,6 +29,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
 	//junit
 	testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
 
@@ -42,6 +44,9 @@ dependencies {
 	// mockito
 	testImplementation "org.mockito:mockito-core:3.0.0"
 	testImplementation "org.mockito:mockito-core:3.0.0"
+
+	// AssertJ
+	testImplementation "org.assertj:assertj-core:3.13.2"
 }
 
 tasks.named('test') {
