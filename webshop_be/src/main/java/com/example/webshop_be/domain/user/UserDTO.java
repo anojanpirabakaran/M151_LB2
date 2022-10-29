@@ -17,6 +17,7 @@ public class UserDTO extends ExtendedDTO {
     @Size(min = 1, max = 50)
     protected String lastName;
 
+    @NotNull
     protected RoleDTO roles;
 
 

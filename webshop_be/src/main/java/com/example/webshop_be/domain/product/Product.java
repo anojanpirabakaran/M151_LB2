@@ -2,11 +2,15 @@ package com.example.webshop_be.domain.product;
 
 import com.example.webshop_be.config.generic.ExtendedEntity;
 import com.example.webshop_be.domain.brand.Brand;
+import com.example.webshop_be.domain.type.Type;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "products")
 public class Product extends ExtendedEntity {
+
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @Column(name = "price")
     private int price;
@@ -15,8 +19,9 @@ public class Product extends ExtendedEntity {
     @JoinColumn(name = "brand_id", referencedColumnName = "id")
     private Brand brand;
 
-    @Column(name = "type")
-    private TypeEnum type;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "type_id", referencedColumnName = "id")
+    private Type type;
 
     @Column(name = "image_link")
     private String imageLink;
@@ -40,11 +45,11 @@ public class Product extends ExtendedEntity {
         this.brand = brand;
     }
 
-    public TypeEnum getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(TypeEnum type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
@@ -62,5 +67,13 @@ public class Product extends ExtendedEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

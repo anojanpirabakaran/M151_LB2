@@ -12,7 +12,7 @@ public class PaymentDetail extends ExtendedEntity {
 
     @Column(name = "card_number")
     @Size(min = 1, max = 16)
-    private int cardNumber;
+    private String cardNumber;
 
     @Column(name = "expired_year")
     @Size(min = 1, max = 4)
@@ -22,11 +22,11 @@ public class PaymentDetail extends ExtendedEntity {
     @Size(min = 1, max = 3)
     private int cvv;
 
-    public int getCardNumber() {
+    public String getCardNumber() {
         return cardNumber;
     }
 
-    public void setCardNumber(int cardNumber) {
+    public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
 

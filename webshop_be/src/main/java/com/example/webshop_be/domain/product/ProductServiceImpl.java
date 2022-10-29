@@ -47,6 +47,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public String updateProduct(String id, Product product) {
         repository.findById(id).map(product1 -> {
+            product1.setName(product.getName());
             product1.setBrand(product.getBrand());
             product1.setType(product.getType());
             product1.setPrice(product.getPrice());

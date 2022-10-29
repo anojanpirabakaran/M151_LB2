@@ -2,20 +2,25 @@ package com.example.webshop_be.domain.product;
 
 import com.example.webshop_be.config.generic.ExtendedDTO;
 import com.example.webshop_be.domain.brand.Brand;
+import com.example.webshop_be.domain.type.Type;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class ProductDTO extends ExtendedDTO {
 
     @NotNull
-    @Size(min = 1, max = 3)
+    @Size(min = 1, max = 25)
+    private String name;
+
+    @NotNull
+    @Size(min = 1, max = 4)
     private int price;
 
     @NotNull
     private Brand brand;
 
     @NotNull
-    private TypeEnum type;
+    private Type type;
 
     @NotNull
     private String imageLink;
@@ -39,11 +44,11 @@ public class ProductDTO extends ExtendedDTO {
         this.brand = brand;
     }
 
-    public TypeEnum getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(TypeEnum type) {
+    public void setType(Type type) {
         this.type = type;
     }
 

@@ -8,7 +8,7 @@ public class PaymentDetailDTO extends ExtendedDTO {
 
     @NotNull
     @Size(min = 1, max = 16)
-    protected int cardNumber;
+    protected String cardNumber;
 
     @NotNull
     @Size(min = 1, max = 4)
@@ -18,11 +18,11 @@ public class PaymentDetailDTO extends ExtendedDTO {
     @Size(min = 1, max = 3)
     protected int cvv;
 
-    public int getCardNumber() {
+    public String getCardNumber() {
         return cardNumber;
     }
 
-    public void setCardNumber(int cardNumber) {
+    public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
 
