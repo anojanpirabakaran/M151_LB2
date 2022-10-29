@@ -17,11 +17,5 @@ public interface RoleMapper {
 
     RoleDTO toDTO(Role role);
 
-    List<RoleDTO> toDTOs(List<Role> authorities);
-
-    @Named("toWithoutAuthoritiesDTO")
-    RoleDTO.WithoutAuthorities toWithoutAuthoritiesDTO(Role role);
-
-    @IterableMapping(qualifiedByName = "toWithoutAuthoritiesDTO")
-    Collection<RoleDTO.WithoutAuthorities> toWithoutAuthoritiesDTOs(Collection<Role> roles);
+    List<RoleDTO> toDTOs(List<Role> roles);
 }

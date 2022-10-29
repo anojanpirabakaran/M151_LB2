@@ -1,4 +1,4 @@
-package com.example.webshop_be.domain.authority;
+package com.example.webshop_be.domain.type;
 
 import com.example.webshop_be.config.generic.ExtendedEntity;
 import javax.persistence.Column;
@@ -6,8 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "authority")
-public class Authority extends ExtendedEntity {
+@Table(name = "type")
+public class Type extends ExtendedEntity {
 
     @Column(name = "name", nullable = false)
     private String name;

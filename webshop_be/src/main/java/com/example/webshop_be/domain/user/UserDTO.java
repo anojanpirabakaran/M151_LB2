@@ -2,7 +2,6 @@ package com.example.webshop_be.domain.user;
 
 import com.example.webshop_be.config.generic.ExtendedDTO;
 import com.example.webshop_be.domain.role.RoleDTO;
-import java.util.Collection;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -18,7 +17,7 @@ public class UserDTO extends ExtendedDTO {
     @Size(min = 1, max = 50)
     protected String lastName;
 
-    protected Collection<RoleDTO> roles;
+    protected RoleDTO roles;
 
 
     public String getEmail() {
@@ -45,11 +44,11 @@ public class UserDTO extends ExtendedDTO {
         this.lastName = lastName;
     }
 
-    public Collection<RoleDTO> getRoles() {
+    public RoleDTO getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<RoleDTO> roles) {
+    public void setRoles(RoleDTO roles) {
         this.roles = roles;
     }
 }

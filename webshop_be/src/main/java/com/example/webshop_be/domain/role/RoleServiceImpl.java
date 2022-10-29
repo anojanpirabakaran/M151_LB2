@@ -1,7 +1,6 @@
 package com.example.webshop_be.domain.role;
 
 
-import com.example.webshop_be.domain.authority.AuthorityService;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -15,12 +14,10 @@ public class RoleServiceImpl implements RoleService {
             "Entity with ID '%s' could not be found";
 
     private final RoleRepository roleRepository;
-    private final AuthorityService authorityService;
 
     @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository, AuthorityService authorityService) {
+    public RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
-        this.authorityService = authorityService;
     }
 
     @Override
@@ -36,30 +33,6 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role addAuthorityToRole(String roleId, String authorityId) {
-        if (roleRepository.existsById(roleId)) {
-            Optional<Role> role = roleRepository.findById(roleId);
-            role.get().getAuthorities().add(authorityService.findById(authorityId));
-            return roleRepository.save(role.get());
-        } else {
-            throw new NoSuchElementException(String.format(NO_SUCH_ELEMENT_ERROR_MSG, roleId));
-        }
-    }
-
-    @Override
-    public Role removeAuthorityFromRole(String roleId, String authorityId)
-            throws NoSuchElementException {
-        if (roleRepository.existsById(roleId)) {
-            Optional<Role> role = roleRepository.findById(roleId);
-            role.get().getAuthorities().remove(authorityService.findById(authorityId));
-            return roleRepository.save(role.get());
-        } else {
-            throw new NoSuchElementException(String.format(NO_SUCH_ELEMENT_ERROR_MSG, roleId));
-        }
-
-    }
-
-    @Override
     public void deleteById(String id) {
         if (!roleRepository.existsById(id)) {
             throw new NoSuchElementException(String.format("Role with ID '%s' not found", id));
@@ -72,7 +45,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> getAllRoles() {
         if (roleRepository.findAll().isEmpty()) {
-            throw new NoSuchElementException(String.format("No User found in the database"));
+            throw new NoSuchElementException(String.format("No Role found in the database"));
         }
         return roleRepository.findAll();
     }
@@ -103,7 +76,6 @@ public class RoleServiceImpl implements RoleService {
         roleRepository.findById(id)
                 .map(role1 -> {
                     role1.setName(role.getName());
-                    role1.setAuthorities(role.getAuthorities());
                     roleRepository.save(role1);
                     return "Role got updated";
                 }).orElseGet(() -> {

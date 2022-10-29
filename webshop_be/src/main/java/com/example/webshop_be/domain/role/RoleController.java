@@ -40,13 +40,6 @@ public class RoleController {
         return new ResponseEntity<>(roleMapper.toDTO(role), HttpStatus.CREATED);
     }
 
-    @PostMapping({"/{roleId}/authorities/{authorityId}", "/{roleId}/authorities/{authorityId}/"})
-    public ResponseEntity<RoleDTO> addAuthorityToRole(@PathVariable String roleId,
-                                                      @PathVariable String authorityId) {
-        Role role = roleService.addAuthorityToRole(roleId, authorityId);
-        return new ResponseEntity<>(roleMapper.toDTO(role), HttpStatus.CREATED);
-    }
-
     @PutMapping({"/{id}", "/{id}/"})
     public ResponseEntity<RoleDTO> updateById(@PathVariable String id,
                                               @RequestBody RoleDTO roleDTO) {
@@ -59,13 +52,6 @@ public class RoleController {
     public ResponseEntity<Void> deleteById(@PathVariable String id) {
         roleService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @DeleteMapping({"/{roleId}/authorities/{authorityId}", "/{roleId}/authorities/{authorityId}/"})
-    public ResponseEntity<RoleDTO> removeAuthorityFromRole(@PathVariable String roleId,
-                                                           @PathVariable String authorityId) {
-        Role role = roleService.removeAuthorityFromRole(roleId, authorityId);
-        return new ResponseEntity<>(roleMapper.toDTO(role), HttpStatus.NO_CONTENT);
     }
 }
 
