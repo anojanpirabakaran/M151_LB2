@@ -20,6 +20,9 @@ public class UserDTO extends ExtendedDTO {
     @NotNull
     protected RoleDTO roles;
 
+    @NotNull
+    protected String password;
+
 
     public String getEmail() {
         return email;
@@ -51,5 +54,13 @@ public class UserDTO extends ExtendedDTO {
 
     public void setRoles(RoleDTO roles) {
         this.roles = roles;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

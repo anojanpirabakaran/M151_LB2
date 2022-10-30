@@ -1,10 +1,11 @@
 package com.example.webshop_be.domain.user;
 
 import com.example.webshop_be.config.error.BadRequestException;
-import com.example.webshop_be.domain.role.Role;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,8 +15,11 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     @Override
@@ -31,10 +35,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
+        String encodedPassword = this.passwordEncoder.encode(user.getPassword());
         if (userRepository.existsById(user.getId())) {
             throw new BadRequestException(
                     String.format("User with Email '%s' already exists", user.getEmail()));
         } else {
+            user.setPassword(encodedPassword);
             return userRepository.save(user);
         }
     }
