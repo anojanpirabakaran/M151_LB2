@@ -1,16 +1,21 @@
 package com.example.webshop_be.domain.user;
 
 import com.example.webshop_be.config.error.BadRequestException;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private static final String NOTFOUND = "User with ID '%s' not found";
 
     private final UserRepository userRepository;
@@ -20,6 +25,23 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = new BCryptPasswordEncoder();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            logger.error("User not found in the database");
+            throw new UsernameNotFoundException("User not found in the database");
+        } else {
+            logger.info("User found in the database: {}", email);
+        }
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        user.getRoles().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        });
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),
+                user.getPassword(), authorities);
     }
 
     @Override
@@ -87,4 +109,6 @@ public class UserServiceImpl implements UserService {
     public User getByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
+
 }

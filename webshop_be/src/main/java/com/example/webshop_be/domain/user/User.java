@@ -4,6 +4,7 @@ import com.example.webshop_be.config.generic.ExtendedEntity;
 import com.example.webshop_be.domain.city.City;
 import com.example.webshop_be.domain.paymentdetail.PaymentDetail;
 import com.example.webshop_be.domain.role.Role;
+import java.util.Set;
 import javax.persistence.*;
 
 @Entity
@@ -36,9 +37,10 @@ public class User extends ExtendedEntity {
     @JoinColumn(name = "paymentdetail_id", referencedColumnName = "id")
     private PaymentDetail paymentDetail;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id", referencedColumnName = "id")
-    private Role roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_role", joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
 
     public String getPassword() {
@@ -105,11 +107,12 @@ public class User extends ExtendedEntity {
         this.paymentDetail = paymentDetail;
     }
 
-    public Role getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Role roles) {
+    public User setRoles(Set<Role> roles) {
         this.roles = roles;
+        return this;
     }
 }
