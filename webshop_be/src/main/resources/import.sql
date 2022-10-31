@@ -6084,3 +6084,9 @@ INSERT INTO products(id, name, price, brand_id, type_id, image_link, description
 INSERT INTO payment_detail(id, card_number, expired_year, cvv) VALUES('1', '1234567812345678', 2023, 484);
 INSERT INTO payment_detail(id, card_number, expired_year, cvv) VALUES('2', '1234567812345679', 2025, 123);
 INSERT INTO payment_detail(id, card_number, expired_year, cvv) VALUES('3', '1234567812345670', 2026, 598);
+
+INSERT INTO users(id, first_name, last_name, password, email, phone_number, address, city_id, paymentdetail_id) VALUES  ('1', 'Anojan', 'Pirabakaran', '$2a$12$T2hx/k4nv0wIqIhzJCvOpu42kwC7g6QXT1DWHcUElcws4qCA08flm', 'anopira7@hotmail.com', '0786455817', 'Leinenstrasse 29', '3732', '1');
+INSERT INTO users(id, first_name, last_name, password, email, phone_number, address, city_id, paymentdetail_id) VALUES  ('2', 'Shawn', 'Lacarta', '$2a$12$T2hx/k4nv0wIqIhzJCvOpu42kwC7g6QXT1DWHcUElcws4qCA08flm', 'shawnlac@hotmail.com', '0789561237', 'Leinenstrasse 29', '3732', '2');
+
+INSERT INTO users_role(users_id, role_id) VALUES('1', '2');
+INSERT INTO users_role(users_id, role_id) VALUES('2', '1');

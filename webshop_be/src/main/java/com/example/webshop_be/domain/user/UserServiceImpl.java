@@ -1,6 +1,8 @@
 package com.example.webshop_be.domain.user;
 
 import com.example.webshop_be.config.error.BadRequestException;
+import com.example.webshop_be.domain.role.Role;
+import com.example.webshop_be.domain.role.RoleRepository;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +22,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
 
+    private final RoleRepository roleRepository;
+
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -110,5 +115,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.existsByEmail(email);
     }
 
-
+    @Override
+    public void addRoleToUser(String email, String rolename) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new NoSuchElementException(
+                    String.format("There is no User with the email {}", email));
+        } else {
+            Optional<Role> role = roleRepository.findByName(rolename);
+            if (role == null) {
+                throw new NoSuchElementException(
+                        String.format("There is no Role with the name {}", rolename));
+            } else {
+                user.getRoles().add(role.get());
+                userRepository.save(user);
+            }
+        }
+    }
 }
