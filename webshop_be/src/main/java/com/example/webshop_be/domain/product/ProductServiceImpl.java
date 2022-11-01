@@ -12,11 +12,11 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository repository;
 
-    private static final String NO_SUCH_ELEMENT_ERROR_MSG =
+    private final String NO_SUCH_ELEMENT_ERROR_MSG =
             "Entity with ID '%s' could not be found";
 
-    private static final String SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG =
-            "Entity with ID '%s' already exists";
+    private final String SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG =
+            "Entity with Name '%s' already exists";
 
     @Autowired
     public ProductServiceImpl(ProductRepository repository) {
@@ -36,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product createProduct(Product product) {
-        if (repository.existsById(product.getId())) {
+        if (repository.existsByName(product.getName())) {
             throw new BadRequestException(
                     String.format(SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG, product.getId()));
         } else {
@@ -45,22 +45,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String updateProduct(String id, Product product) {
-        repository.findById(id).map(product1 -> {
-            product1.setName(product.getName());
-            product1.setBrand(product.getBrand());
-            product1.setType(product.getType());
-            product1.setPrice(product.getPrice());
-            product1.setImageLink(product.getImageLink());
-            product1.setDescription(product.getDescription());
-            repository.save(product1);
-            return "Payment got updated";
-        }).orElseGet(() -> {
-            product.setId(id);
-            repository.save(product);
-            return "Payment got inserted";
-        });
-        return "Payment is updated";
+    public String updateProduct(String id, Product product) throws Exception {
+        if (repository.existsById(id) && repository.existsByName(product.getName())) {
+            repository.findById(id).map(product1 -> {
+                product1.setName(product.getName());
+                product1.setBrand(product.getBrand());
+                product1.setType(product.getType());
+                product1.setPrice(product.getPrice());
+                product1.setImageLink(product.getImageLink());
+                product1.setDescription(product.getDescription());
+                repository.save(product1);
+                return "Product updating";
+            }).orElseThrow(() -> new Exception("Product not found - " + product));
+            return "Product is updated";
+        } else {
+            throw new BadRequestException(
+                    "Product ID doesnt exists or Product Name already exists");
+        }
     }
 
     @Override

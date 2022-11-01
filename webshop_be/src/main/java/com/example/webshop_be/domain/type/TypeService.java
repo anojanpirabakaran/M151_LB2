@@ -12,5 +12,5 @@ public interface TypeService {
 
     Type createType(Type type);
 
-    String updateType(String id, Type type);
+    String updateType(String id, Type type) throws Exception;
 }

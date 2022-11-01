@@ -9,7 +9,7 @@ public interface UserService {
 
     User createUser(User user);
 
-    String updateUser(String id, User user);
+    String updateUser(String id, User user) throws Exception;
 
     String deleteById(String id);
 

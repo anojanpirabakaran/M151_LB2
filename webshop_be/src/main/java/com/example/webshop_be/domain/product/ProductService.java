@@ -8,7 +8,7 @@ public interface ProductService {
 
     Product createProduct(Product product);
 
-    String updateProduct(String id, Product product);
+    String updateProduct(String id, Product product) throws Exception;
 
     void deleteById(String id);
 

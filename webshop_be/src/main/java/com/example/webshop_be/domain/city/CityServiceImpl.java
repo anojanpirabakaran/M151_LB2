@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 public class CityServiceImpl implements CityService {
 
     private final CityRepository repository;
-    private static final String NO_SUCH_ELEMENT_ERROR_MSG =
+    private final String NO_SUCH_ELEMENT_ERROR_MSG =
             "Entity with ID '%s' could not be found";
 
-    private static final String SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG =
-            "Entity with ID '%s' already exists";
+    private final String SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG =
+            "Entity with postal code '%s' already exists";
 
     @Autowired
     public CityServiceImpl(CityRepository repository) {
@@ -25,28 +25,29 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public City createCity(City entity) {
-        if (repository.existsById(entity.getId())) {
+        if (repository.existsByPostalCode(entity.getPostalCode())) {
             throw new BadRequestException(
-                    String.format(SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG, entity.getId()));
+                    String.format(SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG, entity.getPostalCode()));
         } else {
             return repository.save(entity);
         }
     }
 
     @Override
-    public String updateCity(String id, City city) {
-        repository.findById(id)
-                .map(city1 -> {
-                    city1.setName(city.getName());
-                    city1.setPostalCode(city.getPostalCode());
-                    repository.save(city1);
-                    return "City got updated";
-                }).orElseGet(() -> {
-                    city.setId(id);
-                    repository.save(city);
-                    return "Brand got inserted";
-                });
-        return "Brand is updated";
+    public String updateCity(String id, City city) throws Exception {
+        if (repository.existsById(id) && !repository.existsByPostalCode(city.getPostalCode())) {
+            repository.findById(id)
+                    .map(city1 -> {
+                        city1.setName(city.getName());
+                        city1.setPostalCode(city.getPostalCode());
+                        repository.save(city1);
+                        return "City updating";
+                    }).orElseThrow(() -> new Exception("City not found - " + city));
+            return "City is updated";
+        } else {
+            throw new BadRequestException("City ID doesnt exists or Postal Code already exists");
+        }
+
     }
 
     @Override

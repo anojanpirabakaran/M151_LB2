@@ -5,4 +5,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TypeRepository extends JpaRepository<Type, String> {
+
+    Type findByName(String name);
+
+    boolean existsByName(String name);
 }

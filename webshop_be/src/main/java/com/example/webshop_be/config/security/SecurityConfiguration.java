@@ -38,19 +38,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
+        CustomAuthenticationFilter customAuthenticationFilter =
+                new CustomAuthenticationFilter(authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/webshop/login");
 
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/webshop/login/**", "/users/token/refresh").permitAll();
+        http.authorizeRequests().antMatchers("/webshop/login/**", "/users/token/refresh")
+                .permitAll();
         http.authorizeRequests().antMatchers(GET, "/products").permitAll();
-        http.authorizeRequests().antMatchers(GET, "/brands").hasAnyAuthority("User");
-        http.authorizeRequests().antMatchers(GET, "/payment-details/**").hasAnyAuthority("Admin");
-        http.authorizeRequests().antMatchers(POST, "/products").hasAnyAuthority("User");
+        http.authorizeRequests().antMatchers(GET, "/brands").hasAnyAuthority("User", "Admin");
+        http.authorizeRequests().antMatchers("/payment-details/**").hasAnyAuthority("Admin");
+        http.authorizeRequests().antMatchers(POST, "/products").hasAnyAuthority("Admin");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
-        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CustomAuthorizationFilter(),
+                UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

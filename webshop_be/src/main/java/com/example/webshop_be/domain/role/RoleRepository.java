@@ -17,4 +17,6 @@ public interface RoleRepository extends JpaRepository<Role, String> {
     @Modifying
     @Query(nativeQuery = true, value = "delete from public.users_role where users_id = ?")
     void deleteRelationsToUsersById(String id);
+
+    boolean existsByName(String name);
 }

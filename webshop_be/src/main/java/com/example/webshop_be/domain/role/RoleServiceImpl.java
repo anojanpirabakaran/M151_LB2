@@ -1,6 +1,7 @@
 package com.example.webshop_be.domain.role;
 
 
+import com.example.webshop_be.config.error.BadRequestException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    private static final String NO_SUCH_ELEMENT_ERROR_MSG =
+    private final String NO_SUCH_ELEMENT_ERROR_MSG =
             "Entity with ID '%s' could not be found";
 
     private final RoleRepository roleRepository;
@@ -63,7 +64,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role createRole(Role role) {
-        if (roleRepository.existsById(role.getId())) {
+        if (roleRepository.existsByName(role.getName())) {
             return roleRepository.save(role);
         } else {
             throw new NoSuchElementException(
@@ -72,17 +73,17 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public String updateRole(String id, Role role) {
-        roleRepository.findById(id)
-                .map(role1 -> {
-                    role1.setName(role.getName());
-                    roleRepository.save(role1);
-                    return "Role got updated";
-                }).orElseGet(() -> {
-                    role.setId(id);
-                    roleRepository.save(role);
-                    return "Role got inserted";
-                });
-        return "Role is updated";
+    public String updateRole(String id, Role role) throws Exception {
+        if (roleRepository.existsById(id) && roleRepository.existsByName(role.getName())) {
+            roleRepository.findById(id)
+                    .map(role1 -> {
+                        role1.setName(role.getName());
+                        roleRepository.save(role1);
+                        return "Role updating";
+                    }).orElseThrow(() -> new Exception("Role not found - " + role));
+            return "Role is updated";
+        } else {
+            throw new BadRequestException("Role ID doesnt exists or Role Name already exists");
+        }
     }
 }

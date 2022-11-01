@@ -42,7 +42,7 @@ public class TypeController {
 
     @PutMapping({"/{id}", "/{id}/"})
     public ResponseEntity<TypeDTO> updateById(@PathVariable String id,
-                                              @RequestBody TypeDTO typeDTO) {
+                                              @RequestBody TypeDTO typeDTO) throws Exception {
         Type type = typeMapper.fromDTO(typeDTO);
         typeService.updateType(id, type);
         return new ResponseEntity<>(typeMapper.toDTO(type), HttpStatus.OK);

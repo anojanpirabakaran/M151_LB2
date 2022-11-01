@@ -42,7 +42,7 @@ public class RoleController {
 
     @PutMapping({"/{id}", "/{id}/"})
     public ResponseEntity<RoleDTO> updateById(@PathVariable String id,
-                                              @RequestBody RoleDTO roleDTO) {
+                                              @RequestBody RoleDTO roleDTO) throws Exception {
         Role role = roleMapper.fromDTO(roleDTO);
         roleService.updateRole(id, role);
         return new ResponseEntity<>(roleMapper.toDTO(role), HttpStatus.OK);

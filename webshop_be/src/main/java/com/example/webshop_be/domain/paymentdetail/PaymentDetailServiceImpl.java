@@ -13,11 +13,11 @@ public class PaymentDetailServiceImpl implements PaymentDetailService {
     private final PaymentDetailRepository repository;
 
 
-    private static final String NO_SUCH_ELEMENT_ERROR_MSG =
+    private final String NO_SUCH_ELEMENT_ERROR_MSG =
             "Entity with ID '%s' could not be found";
 
-    private static final String SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG =
-            "Entity with ID '%s' already exists";
+    private final String SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG =
+            "Entity with Card Number '%s' already exists";
 
     @Autowired
     public PaymentDetailServiceImpl(PaymentDetailRepository repository) {
@@ -37,29 +37,33 @@ public class PaymentDetailServiceImpl implements PaymentDetailService {
 
     @Override
     public PaymentDetail createPayment(PaymentDetail paymentDetail) {
-        if (repository.existsById(paymentDetail.getId())) {
+        if (repository.existsByCardNumber(paymentDetail.getCardNumber())) {
             throw new BadRequestException(
-                    String.format(SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG, paymentDetail.getId()));
+                    String.format(SUCH_ELEMENT_ALREADY_EXISTS_ERROR_MSG,
+                            paymentDetail.getCardNumber()));
         } else {
             return repository.save(paymentDetail);
         }
     }
 
     @Override
-    public String updatePayment(String id, PaymentDetail paymentDetail) {
-        repository.findById(id)
-                .map(paymentDetail1 -> {
-                    paymentDetail1.setExpiredYear(paymentDetail.getExpiredYear());
-                    paymentDetail1.setCvv(paymentDetail.getCvv());
-                    paymentDetail1.setCardNumber(paymentDetail.getCardNumber());
-                    repository.save(paymentDetail1);
-                    return "Payment got updated";
-                }).orElseGet(() -> {
-                    paymentDetail.setId(id);
-                    repository.save(paymentDetail);
-                    return "Payment got inserted";
-                });
-        return "Payment is updated";
+    public String updatePayment(String id, PaymentDetail paymentDetail) throws Exception {
+        if (repository.existsById(id) &&
+                !repository.existsByCardNumber(paymentDetail.getCardNumber())) {
+            repository.findById(id)
+                    .map(paymentDetail1 -> {
+                        paymentDetail1.setExpiredYear(paymentDetail.getExpiredYear());
+                        paymentDetail1.setCvv(paymentDetail.getCvv());
+                        paymentDetail1.setCardNumber(paymentDetail.getCardNumber());
+                        repository.save(paymentDetail1);
+                        return "Payment Detail updating";
+                    }).orElseThrow(
+                            () -> new Exception("Payment Detail not found - " + paymentDetail));
+            return "Payment is updated";
+        } else {
+            throw new BadRequestException("Payment ID doesnt exists or Card Number already exists");
+        }
+
     }
 
     @Override

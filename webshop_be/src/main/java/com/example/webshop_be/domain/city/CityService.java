@@ -8,7 +8,7 @@ public interface CityService {
 
     City createCity(City city);
 
-    String updateCity(String id, City city);
+    String updateCity(String id, City city) throws Exception;
 
     void deleteById(String id);
 

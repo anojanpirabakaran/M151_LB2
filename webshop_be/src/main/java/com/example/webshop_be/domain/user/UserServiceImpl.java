@@ -4,8 +4,7 @@ import com.example.webshop_be.config.error.BadRequestException;
 import com.example.webshop_be.domain.role.Role;
 import com.example.webshop_be.domain.role.RoleRepository;
 import java.util.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,10 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
-
-    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-    private static final String NOTFOUND = "User with ID '%s' not found";
+    private final String NOTFOUND = "User with ID '%s' not found";
 
     private final UserRepository userRepository;
 
@@ -36,10 +34,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            logger.error("User not found in the database");
+            log.error("User not found in the database");
             throw new UsernameNotFoundException("User not found in the database");
         } else {
-            logger.info("User found in the database: {}", email);
+            log.info("User found in the database: {}", email);
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getRoles().forEach(role -> {
@@ -63,7 +61,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User createUser(User user) {
         String encodedPassword = this.passwordEncoder.encode(user.getPassword());
-        if (userRepository.existsById(user.getId())) {
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw new BadRequestException(
                     String.format("User with Email '%s' already exists", user.getEmail()));
         } else {
@@ -73,24 +71,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public String updateUser(String id, User user) {
-        userRepository.findById(id)
-                .map(user1 -> {
-                    user1.setFirstName(user.getFirstName());
-                    user1.setEmail(user.getEmail());
-                    user1.setLastName(user.getLastName());
-                    user1.setAddress(user.getAddress());
-                    user1.setPassword(user.getPassword());
-                    user1.setEmail(user.getEmail());
-                    user1.setCity(user.getCity());
-                    userRepository.save(user1);
-                    return "User got updated";
-                }).orElseGet(() -> {
-                    user.setId(id);
-                    userRepository.save(user);
-                    return "User got inserted";
-                });
-        return "User is updated";
+    public String updateUser(String id, User user) throws Exception {
+        if (userRepository.existsById(id) && !userRepository.existsByEmail(user.getEmail())) {
+            userRepository.findById(id)
+                    .map(user1 -> {
+                        user1.setFirstName(user.getFirstName());
+                        user1.setEmail(user.getEmail());
+                        user1.setLastName(user.getLastName());
+                        user1.setAddress(user.getAddress());
+                        user1.setPassword(user.getPassword());
+                        user1.setEmail(user.getEmail());
+                        user1.setCity(user.getCity());
+                        userRepository.save(user1);
+                        return "User updating";
+                    }).orElseThrow(() -> new Exception("User not found - " + user));
+            return "User is updated";
+        } else {
+            throw new BadRequestException("User ID doesnt exists or Email already exists");
+        }
     }
 
     @Override
@@ -112,7 +110,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User getByEmail(String email) {
-        return userRepository.existsByEmail(email);
+        return userRepository.getUserByEmail(email);
     }
 
     @Override

@@ -77,12 +77,11 @@ public class UserController {
     }
 
     @PostMapping({"/role/addtouser", "/role/addtouser/"})
-    public ResponseEntity<Void>addRoleToUser(@RequestBody RoleToUserForm form){
+    public ResponseEntity<Void> addRoleToUser(@RequestBody RoleToUserForm form) {
         userService.addRoleToUser(form.getEmail(), form.getRoleName());
         return ResponseEntity.ok().build();
     }
 
-    /*
     @GetMapping({"/token/refresh", "/token/refresh/"})
     public void refreshToken(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
@@ -93,8 +92,8 @@ public class UserController {
                 Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
-                String username = decodedJWT.getSubject();
-                User user = userService.getByEmail(username);
+                String email = decodedJWT.getSubject();
+                User user = userService.getByEmail(email);
                 String access_token = JWT.create()
                         .withSubject(user.getEmail())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
@@ -123,11 +122,10 @@ public class UserController {
             throw new RuntimeException("Refresh Token is missing");
         }
     }
-     */
-    }
+}
 
 @Data
-class RoleToUserForm{
+class RoleToUserForm {
     private String email;
     private String roleName;
 }

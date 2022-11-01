@@ -7,7 +7,7 @@ public interface BrandService {
 
     Brand createBrand(Brand brand);
 
-    String updateBrand(String id, Brand brand);
+    String updateBrand(String id, Brand brand) throws Exception;
 
     String deleteById(String id);
 

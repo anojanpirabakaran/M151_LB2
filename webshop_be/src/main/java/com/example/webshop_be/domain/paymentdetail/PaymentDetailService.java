@@ -8,7 +8,7 @@ public interface PaymentDetailService {
 
     PaymentDetail createPayment(PaymentDetail paymentDetail);
 
-    String updatePayment(String id, PaymentDetail paymentDetail);
+    String updatePayment(String id, PaymentDetail paymentDetail) throws Exception;
 
     void deleteById(String id);
 

@@ -18,5 +18,5 @@ public interface RoleService{
 
     Role createRole(Role role);
 
-    String updateRole(String id, Role role);
+    String updateRole(String id, Role role) throws Exception;
 }

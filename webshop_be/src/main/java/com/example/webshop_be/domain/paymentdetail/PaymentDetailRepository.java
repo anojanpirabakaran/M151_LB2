@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PaymentDetailRepository extends JpaRepository<PaymentDetail, String> {
-}
+
+    boolean existsByCardNumber(String cardNumber);}
