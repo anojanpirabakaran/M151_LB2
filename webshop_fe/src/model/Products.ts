@@ -5,6 +5,7 @@ import { Brand } from "./Brand"
 export interface Products {
     id: String,
     price: number,
+    name: String,
     description: String,
     imageLink: String
     type: Types,

@@ -1,0 +1,32 @@
+<ng-container *ngIf="true">
+    <div class="card-table">
+        <div class="cart-product">
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Brand</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of product">
+                        <td>{{ item.brand}}</td>
+                        <td>Name</td>
+                        <td>Price</td>
+                        <td>
+                            <button class="btn btn-danger">Remove</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="false">
+    
+</ng-container>
+
+

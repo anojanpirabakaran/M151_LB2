@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Products } from 'src/model/Products';
+import { CartService } from 'src/service/CartService.service';
 import { HttpService } from 'src/service/HttpService.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { HttpService } from 'src/service/HttpService.service';
 })
 export class ProductDetailComponent implements OnInit {
 
-  constructor(private active: ActivatedRoute, private httpService: HttpService) { }
+  constructor(private active: ActivatedRoute, private httpService: HttpService, private cartService: CartService) { }
 
 product: Products | undefined;
 
@@ -19,6 +20,10 @@ product: Products | undefined;
     console.log(id)
     this.httpService.getProductById(id!).subscribe(data => this.product = data)
     
+  }
+
+  addToCart(item: any){
+    this.cartService.addToCart(item);
   }
 
 }
