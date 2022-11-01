@@ -10,7 +10,6 @@ import { AboutusComponent } from './aboutus/aboutus.component';
 import { HomeComponent } from './home/home.component';
 import { ProductsComponent } from './products/products.component';
 import { MatSliderModule } from '@angular/material/slider';
-import { LoginComponent } from './login/login.component'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
@@ -20,7 +19,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import { AuthInterceptor } from 'src/shared/authconfig.interceptor';
 
 
 @NgModule({
@@ -31,7 +29,6 @@ import { AuthInterceptor } from 'src/shared/authconfig.interceptor';
     AboutusComponent,
     HomeComponent,
     ProductsComponent,
-    LoginComponent,
     ProductDetailComponent,
     CartComponent,
   
@@ -50,13 +47,7 @@ import { AuthInterceptor } from 'src/shared/authconfig.interceptor';
     MatFormFieldModule,
     MatInputModule
   ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
