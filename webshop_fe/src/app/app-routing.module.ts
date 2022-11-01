@@ -8,7 +8,6 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 import { ProductsComponent } from './products/products.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AuthGuard } from 'src/shared/auth.guard';
-import { SignupComponent } from './signup/signup.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -20,7 +19,6 @@ const routes: Routes = [
   { path: 'products', component: ProductsComponent },
   { path: 'login', component: LoginComponent },
   { path: 'cart', component: CartComponent },
-  { path: 'sign-up', component: SignupComponent },
   { path: 'user-profile/:id', component: ProfileComponent, canActivate: [AuthGuard]}
 ];
 
