@@ -21,7 +21,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { AuthInterceptor } from 'src/shared/authconfig.interceptor';
-import { SignupComponent } from './signup/signup.component';
+
 
 @NgModule({
   declarations: [
@@ -34,7 +34,7 @@ import { SignupComponent } from './signup/signup.component';
     LoginComponent,
     ProductDetailComponent,
     CartComponent,
-    SignupComponent,   
+  
   ],
   imports: [
     BrowserModule,
