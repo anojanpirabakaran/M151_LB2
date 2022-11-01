@@ -60,17 +60,21 @@ public class TypeServiceImpl implements TypeService {
 
     @Override
     public String updateType(String id, Type type) throws Exception {
-        if (typeRepository.existsById(id) && !typeRepository.existsByName(type.getName())) {
+        if (typeRepository.existsById(id)) {
             typeRepository.findById(id)
                     .map(type1 -> {
                         type1.setName(type.getName());
-                        typeRepository.save(type1);
+                        if (typeRepository.existsByName(type1.getName())) {
+                            throw new BadRequestException("Type already exists");
+                        } else {
+                            typeRepository.save(type1);
+                        }
                         return "Type updating";
                     }).orElseThrow(() -> new Exception("Type not found - " + type));
             return "Type is updated";
         } else {
             throw new BadRequestException(
-                    String.format("Type id doesnt exists or Type name already exists"));
+                    String.format("Type id doesnt exists"));
         }
 
     }

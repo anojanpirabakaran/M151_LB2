@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public String updateUser(String id, User user) throws Exception {
-        if (userRepository.existsById(id) && !userRepository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsById(id)) {
             userRepository.findById(id)
                     .map(user1 -> {
                         user1.setFirstName(user.getFirstName());
@@ -82,12 +82,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                         user1.setPassword(user.getPassword());
                         user1.setEmail(user.getEmail());
                         user1.setCity(user.getCity());
-                        userRepository.save(user1);
+
+                        if (userRepository.existsByEmail(user1.getEmail())) {
+                            throw new BadRequestException("Email already exists");
+                        } else {
+                            userRepository.save(user1);
+                        }
                         return "User updating";
                     }).orElseThrow(() -> new Exception("User not found - " + user));
             return "User is updated";
         } else {
-            throw new BadRequestException("User ID doesnt exists or Email already exists");
+            throw new BadRequestException("User ID doesnt exists");
         }
     }
 

@@ -46,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String updateProduct(String id, Product product) throws Exception {
-        if (repository.existsById(id) && repository.existsByName(product.getName())) {
+        if (repository.existsById(id)) {
             repository.findById(id).map(product1 -> {
                 product1.setName(product.getName());
                 product1.setBrand(product.getBrand());
@@ -54,13 +54,18 @@ public class ProductServiceImpl implements ProductService {
                 product1.setPrice(product.getPrice());
                 product1.setImageLink(product.getImageLink());
                 product1.setDescription(product.getDescription());
-                repository.save(product1);
+
+                if (repository.existsByName(product1.getName())) {
+                    throw new BadRequestException("Product Name already exists");
+                } else {
+                    repository.save(product1);
+                }
                 return "Product updating";
             }).orElseThrow(() -> new Exception("Product not found - " + product));
             return "Product is updated";
         } else {
             throw new BadRequestException(
-                    "Product ID doesnt exists or Product Name already exists");
+                    "Product ID doesnt exists");
         }
     }
 

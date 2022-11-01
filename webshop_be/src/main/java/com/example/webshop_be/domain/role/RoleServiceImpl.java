@@ -74,16 +74,20 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public String updateRole(String id, Role role) throws Exception {
-        if (roleRepository.existsById(id) && roleRepository.existsByName(role.getName())) {
+        if (roleRepository.existsById(id)) {
             roleRepository.findById(id)
                     .map(role1 -> {
                         role1.setName(role.getName());
-                        roleRepository.save(role1);
+                        if (roleRepository.existsByName(role1.getName())) {
+                            throw new BadRequestException("Role Name already exists");
+                        } else {
+                            roleRepository.save(role1);
+                        }
                         return "Role updating";
                     }).orElseThrow(() -> new Exception("Role not found - " + role));
             return "Role is updated";
         } else {
-            throw new BadRequestException("Role ID doesnt exists or Role Name already exists");
+            throw new BadRequestException("Role ID doesnt exists");
         }
     }
 }

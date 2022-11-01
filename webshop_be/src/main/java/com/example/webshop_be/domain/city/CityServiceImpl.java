@@ -35,17 +35,21 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public String updateCity(String id, City city) throws Exception {
-        if (repository.existsById(id) && !repository.existsByPostalCode(city.getPostalCode())) {
+        if (repository.existsById(id)) {
             repository.findById(id)
                     .map(city1 -> {
                         city1.setName(city.getName());
                         city1.setPostalCode(city.getPostalCode());
-                        repository.save(city1);
+                        if (repository.existsByPostalCode(city1.getPostalCode())) {
+                            throw new BadRequestException("Postal Code already exists");
+                        } else {
+                            repository.save(city1);
+                        }
                         return "City updating";
                     }).orElseThrow(() -> new Exception("City not found - " + city));
             return "City is updated";
         } else {
-            throw new BadRequestException("City ID doesnt exists or Postal Code already exists");
+            throw new BadRequestException("City ID doesnt exists");
         }
 
     }

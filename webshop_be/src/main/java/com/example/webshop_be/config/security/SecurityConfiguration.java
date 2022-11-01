@@ -45,10 +45,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/webshop/login/**", "/users/token/refresh")
                 .permitAll();
-        http.authorizeRequests().antMatchers(GET, "/products").permitAll();
-        http.authorizeRequests().antMatchers(POST, "/brands").hasAnyAuthority("User", "Admin");
+        http.authorizeRequests().antMatchers(GET, "/products/**").permitAll();
+        http.authorizeRequests().antMatchers("/brands").hasAnyAuthority("User", "Admin");
         http.authorizeRequests().antMatchers("/payment-details/**").hasAnyAuthority("Admin");
+        http.authorizeRequests().antMatchers("/roles").hasAnyAuthority("Admin", "User");
+        http.authorizeRequests().antMatchers("/cities").hasAnyAuthority("Admin", "User");
         http.authorizeRequests().antMatchers(POST, "/products").hasAnyAuthority("Admin", "Users");
+        http.authorizeRequests().antMatchers(DELETE, "/products/**").hasAnyAuthority("Admin");
+        http.authorizeRequests().antMatchers(PUT, "/products/**").hasAnyAuthority("Admin");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(),

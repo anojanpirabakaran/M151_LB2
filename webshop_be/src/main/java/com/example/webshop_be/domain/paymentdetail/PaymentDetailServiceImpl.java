@@ -48,20 +48,24 @@ public class PaymentDetailServiceImpl implements PaymentDetailService {
 
     @Override
     public String updatePayment(String id, PaymentDetail paymentDetail) throws Exception {
-        if (repository.existsById(id) &&
-                !repository.existsByCardNumber(paymentDetail.getCardNumber())) {
+        if (repository.existsById(id)) {
             repository.findById(id)
                     .map(paymentDetail1 -> {
                         paymentDetail1.setExpiredYear(paymentDetail.getExpiredYear());
                         paymentDetail1.setCvv(paymentDetail.getCvv());
                         paymentDetail1.setCardNumber(paymentDetail.getCardNumber());
-                        repository.save(paymentDetail1);
+
+                        if (repository.existsByCardNumber(paymentDetail1.getCardNumber())) {
+                            throw new BadRequestException("Card Number already exists");
+                        } else {
+                            repository.save(paymentDetail1);
+                        }
                         return "Payment Detail updating";
                     }).orElseThrow(
                             () -> new Exception("Payment Detail not found - " + paymentDetail));
             return "Payment is updated";
         } else {
-            throw new BadRequestException("Payment ID doesnt exists or Card Number already exists");
+            throw new BadRequestException("Payment ID doesnt exists");
         }
 
     }

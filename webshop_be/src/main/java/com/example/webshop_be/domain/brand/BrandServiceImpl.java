@@ -48,16 +48,20 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public String updateBrand(String id, Brand brand) throws Exception {
-        if (brandRepository.existsById(id) && !brandRepository.existsByName(brand.getName())) {
+        if (brandRepository.existsById(id)) {
             brandRepository.findById(id)
                     .map(brand1 -> {
                         brand1.setName(brand.getName());
-                        brandRepository.save(brand1);
+                        if (brandRepository.existsByName(brand1.getName())) {
+                            throw new BadRequestException("Brand already exists");
+                        } else {
+                            brandRepository.save(brand1);
+                        }
                         return "Brand updating";
                     }).orElseThrow(() -> new Exception("Brand not found - " + brand));
             return "Brand is updated";
         } else {
-            throw new BadRequestException("Brand id doesnt exists or Brand name already exists");
+            throw new BadRequestException("Brand id doesnt exists");
         }
 
     }
