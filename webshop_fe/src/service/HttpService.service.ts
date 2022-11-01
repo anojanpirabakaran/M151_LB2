@@ -7,16 +7,16 @@ import { Products } from 'src/model/Products';
   })
 export class HttpService {
 
-     url = "http://localhost:8080/products";
+     URL = "http://localhost:8080/products";
 
   constructor(private http: HttpClient) { }
 
 getProducts(){
-    return this.http.get<Products[]>(this.url);
+    return this.http.get<Products[]>(this.URL);
 }
 
 getProductById(id: string){
-    const url = `${this.url}/${id}`;
+    const url = `${this.URL}/${id}`;
     return this.http.get<Products>(url)
 }
 }
