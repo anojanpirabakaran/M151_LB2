@@ -1,7 +1,6 @@
 package com.example.webshop_be.config.security;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 
 import com.example.webshop_be.config.filter.CustomAuthenticationFilter;
 import com.example.webshop_be.config.filter.CustomAuthorizationFilter;
@@ -47,9 +46,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/webshop/login/**", "/users/token/refresh")
                 .permitAll();
         http.authorizeRequests().antMatchers(GET, "/products").permitAll();
-        http.authorizeRequests().antMatchers(GET, "/brands").hasAnyAuthority("User", "Admin");
+        http.authorizeRequests().antMatchers(POST, "/brands").hasAnyAuthority("User", "Admin");
         http.authorizeRequests().antMatchers("/payment-details/**").hasAnyAuthority("Admin");
-        http.authorizeRequests().antMatchers(POST, "/products").hasAnyAuthority("Admin");
+        http.authorizeRequests().antMatchers(POST, "/products").hasAnyAuthority("Admin", "Users");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(),
